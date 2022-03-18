@@ -1,0 +1,22 @@
+{
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaVersion": "latest", // Allows the use of modern ECMAScript features
+		"sourceType": "module", // Allows for the use of imports
+		"project": "./tsconfig.json"
+	},
+	"rules": {
+		"@typescript-eslint/no-unused-vars": "warn",
+		"prettier/prettier": [
+			"error",
+			{
+				"endOfLine": "auto"
+			}
+		]
+	},
+	"plugins": ["@typescript-eslint"],
+	"extends": ["plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
+	"env": {
+		"node": true // Enable Node.js global variables
+	}
+}

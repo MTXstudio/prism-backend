@@ -1,0 +1,15 @@
+{
+	"extends": "@tsconfig/node16/tsconfig.json",
+	"include": ["src"],
+	"compilerOptions": {
+		"outDir": "dist",
+		"lib": ["es5", "ESNext"],
+		"resolveJsonModule": true,
+		"baseUrl": "./src",
+		"paths": {
+			"": [""]
+		}
+	},
+
+	"exclude": ["node_modules"]
+}
