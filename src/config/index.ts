@@ -1,10 +1,10 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-if (!process.env.ALCHEMY_KEY || !process.env.WALLET_PRIVATE_KEY) {
-	console.log('process.env.ALCHEMY_KEY or process.env.WALLET_PRIVATE_KEY is undefined');
-	process.exit(-1);
-}
+// if (!process.env.ALCHEMY_KEY || !process.env.WALLET_PRIVATE_KEY) {
+// 	console.log('process.env.ALCHEMY_KEY or process.env.WALLET_PRIVATE_KEY is undefined');
+// 	process.exit(-1);
+// }
 
 export const config = {
 	alchemy: {
