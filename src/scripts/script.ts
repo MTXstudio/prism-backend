@@ -4,19 +4,25 @@ import { Project } from '../interfaces/project';
 import abi from '../abi.json';
 import { Collection } from 'interfaces/collection';
 import { config } from '../config/index';
+import readline from 'readline';
+
+const rl = readline.createInterface({
+	input: process.stdin,
+	output: process.stdout,
+});
 
 const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
 const signer = provider.getSigner();
 const contract = new ethers.Contract(config.contract.address, abi, signer);
 
-const createProject = async ({ name, projectURI, managerAddress }: Project) => {
+const createProject = async ({ name, managerAddress }: Project) => {
 	let receipt;
 	try {
-		const tx = await contract.createProject(name, projectURI, managerAddress);
+		const tx = await contract.createProject(name, managerAddress);
 		// The operation is NOT complete yet; we must wait until it is mined
 		receipt = await tx.wait();
 	} catch (e) {
-		console.error('script.ts[addProject]', e);
+		console.error('script.ts[createProject]', e);
 		return;
 	}
 	return receipt;
@@ -29,7 +35,7 @@ const createCollection = async ({ name, maxInvocations, projectId }: Collection)
 		// The operation is NOT complete yet; we must wait until it is mined
 		receipt = await tx.wait();
 	} catch (e) {
-		console.error('script.ts[addCollection]', e);
+		console.error('script.ts[createCollection]', e);
 		return;
 	}
 	return receipt;
@@ -49,7 +55,7 @@ const createTokens = async (
 		// The operation is NOT complete yet; we must wait until it is mined
 		receipt = await tx.wait();
 	} catch (e) {
-		console.error('script.ts[addCollection]', e);
+		console.error('script.ts[createTokens]', e);
 		return;
 	}
 	return receipt;
@@ -60,7 +66,7 @@ const getCurrentProjectId = async () => {
 	try {
 		res = await contract.nextProjectId();
 	} catch (e) {
-		console.error('script.ts[addProject]', e);
+		console.error('script.ts[getCurrentProjectId]', e);
 		return;
 	}
 
@@ -72,7 +78,7 @@ const getCurrentProjectCollectionId = async () => {
 	try {
 		res = await contract.nextCollectionId();
 	} catch (e) {
-		console.error('script.ts[addProject]', e);
+		console.error('script.ts[getCurrentProjectCollectionId]', e);
 		return;
 	}
 
@@ -80,6 +86,14 @@ const getCurrentProjectCollectionId = async () => {
 };
 
 const runScripts = async () => {
+	// for await (const line of rl) {
+	// 	// Each line in the readline input will be successively available here as
+	// 	// `line`.
+	// 	if (Number(line) === 0) {
+	// 	} else if (Number(line) === 0) {
+	// 	}
+	// 	console.log(line);
+	// }
 	console.log(await signer.getAddress());
 	try {
 		const projectId = await getCurrentProjectId();
@@ -111,6 +125,8 @@ const runScripts = async () => {
 		);
 		if (!receiptTokens)
 			throw new Error(`Failed to create tokens with the collection ids [${collectionId}]`);
+
+		console.log('', receiptTokens);
 	} catch (e) {
 		console.error(e);
 		process.exit(-1);

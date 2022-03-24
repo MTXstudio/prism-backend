@@ -16,3 +16,7 @@ export const connectToTableLand = async () => {
 	}
 	return tbl;
 };
+
+export const createTables = async () => {
+	//
+};

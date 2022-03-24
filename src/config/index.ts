@@ -14,9 +14,9 @@ export const config = {
 		privateKey: process.env.WALLET_PRIVATE_KEY || '',
 	},
 	server: {
-		port: process.env.PORT || 3000,
+		port: process.env.PORT || 3001,
 	},
 	contract: {
-		address: '0x1E33F210A9581f127eb93ee0eB2F8fe419414545',
+		address: '0x2A69AB2c7B4ac80aC0E45C6DA036F5dFc7433772',
 	},
 };
