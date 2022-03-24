@@ -15,6 +15,7 @@ const db = firebaseApp.firestore();
 
 const start = async () => {
 	// contractEventLoader(firebaseApp);
+	db.collection('heroku').add({ isWorking: true });
 	app.get('/', (req, res) => {
 		res.send('Its working');
 	});
