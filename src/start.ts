@@ -15,6 +15,9 @@ const db = firebaseApp.firestore();
 
 const start = async () => {
 	// contractEventLoader(firebaseApp);
+	app.get('/', (req, res) => {
+		res.send('Its working');
+	});
 	app.get('/:tokenId', async (req, res) => {
 		const { tokenId } = req.params || {};
 		if (!tokenId)
