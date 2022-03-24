@@ -4,8 +4,8 @@
 	"main": "start.ts",
 	"license": "MIT",
 	"scripts": {
-		"start": "ts-node ./src/start.ts",
-		"dev": "tsc && node dist/start.js",
+		"start": "tsc && node dist/start.js",
+		"dev": "node dist/start.js",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"script": "ts-node ./src/scripts/script.ts"
