@@ -1,6 +1,6 @@
 import express from 'express';
-// import admin from 'firebase-admin';
-// import { applicationDefault } from 'firebase-admin/app';
+import admin from 'firebase-admin';
+import { applicationDefault } from 'firebase-admin/app';
 import { config } from './config/index';
 // import { contractEventLoader } from './events/loader';
 import './helpers/fetch-polyfill';
@@ -8,10 +8,10 @@ import './helpers/fetch-polyfill';
 
 const app = express();
 
-// const firebaseApp = admin.initializeApp({
-// 	credential: applicationDefault(),
-// });
-// const db = firebaseApp.firestore();
+const firebaseApp = admin.initializeApp({
+	credential: applicationDefault(),
+});
+const db = firebaseApp.firestore();
 
 const start = async () => {
 	// contractEventLoader(firebaseApp);
