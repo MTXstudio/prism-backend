@@ -5,6 +5,7 @@
 		"outDir": "dist",
 		"lib": ["es5", "ESNext"],
 		"resolveJsonModule": true,
+		"esModuleInterop": true,
 		"baseUrl": "./src",
 		"paths": {
 			"": [""]

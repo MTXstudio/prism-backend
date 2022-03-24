@@ -1,10 +1,10 @@
 import express from 'express';
-import admin from 'firebase-admin';
-import { applicationDefault } from 'firebase-admin/app';
+// import admin from 'firebase-admin';
+// import { applicationDefault } from 'firebase-admin/app';
 import { config } from './config/index';
-import { contractEventLoader } from './events/loader';
+// import { contractEventLoader } from './events/loader';
 import './helpers/fetch-polyfill';
-import { ErrorCode } from './enums/error-code';
+// import { ErrorCode } from './enums/error-code';
 
 const app = express();
 
