@@ -1,3 +1,4 @@
+import { ErrorCode } from 'enums/error-code';
 import express from 'express';
 import admin from 'firebase-admin';
 import { applicationDefault } from 'firebase-admin/app';
@@ -26,17 +27,17 @@ const start = async () => {
 	app.get('/', (req, res) => {
 		res.send('Its working');
 	});
-	// app.get('/:tokenId', async (req, res) => {
-	// 	const { tokenId } = req.params || {};
-	// 	if (!tokenId)
-	// 		return res.status(ErrorCode.BAD_REQUEST_400).send('Please provider the tokenId as param');
+	app.get('/:tokenId', async (req, res) => {
+		const { tokenId } = req.params || {};
+		if (!tokenId)
+			return res.status(ErrorCode.BAD_REQUEST_400).send('Please provider the tokenId as param');
 
-	// 	// db.collection('tokens').doc(tokenId)
-	// 	const docRef = await db.collection('tokens').doc(tokenId).get();
-	// 	if (docRef.exists) res.json({ data: docRef.data(), id: docRef.id });
-	// 	else
-	// 		res.status(ErrorCode.NOT_FOUND_404).send(`The token with the id ${tokenId} doesn't exists.`);
-	// });
+		// db.collection('tokens').doc(tokenId)
+		const docRef = await db.collection('tokens').doc(tokenId).get();
+		if (docRef.exists) res.json({ data: docRef.data(), id: docRef.id });
+		else
+			res.status(ErrorCode.NOT_FOUND_404).send(`The token with the id ${tokenId} doesn't exists.`);
+	});
 
 	app.listen(config.server.port, () =>
 		console.log(`The Server is listening to ${config.server.port}`),
