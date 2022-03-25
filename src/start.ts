@@ -1,7 +1,6 @@
-import { ErrorCode } from 'enums/error-code';
 import express from 'express';
 import admin from 'firebase-admin';
-import { applicationDefault } from 'firebase-admin/app';
+import { ErrorCode } from './enums/error-code';
 import { config } from './config/index';
 // import { contractEventLoader } from './events/loader';
 import './helpers/fetch-polyfill';
