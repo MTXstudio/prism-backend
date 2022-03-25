@@ -19,4 +19,9 @@ export const config = {
 	contract: {
 		address: '0x2A69AB2c7B4ac80aC0E45C6DA036F5dFc7433772',
 	},
+	firebase: {
+		projectId: process.env.FIREBASE_PROJECT_ID,
+		privateKey: (process.env.FIREBASE_PRIVATE_KEY as string).replace(/\\n/g, '\n'),
+		clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+	},
 };

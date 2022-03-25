@@ -8,9 +8,16 @@ import './helpers/fetch-polyfill';
 
 const app = express();
 
+//https://stackoverflow.com/questions/41287108/deploying-firebase-app-with-service-account-to-heroku-environment-variables-wit
+
 const firebaseApp = admin.initializeApp({
-	credential: applicationDefault(),
+	credential: admin.credential.cert({
+		projectId: config.firebase.projectId,
+		privateKey: config.firebase.privateKey,
+		clientEmail: config.firebase.clientEmail,
+	}),
 });
+
 const db = firebaseApp.firestore();
 
 const start = async () => {
