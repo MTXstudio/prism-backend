@@ -22,7 +22,7 @@ const firebaseApp = admin.initializeApp({
 const db = firebaseApp.firestore();
 
 app.get('/', (req, res) => {
-	res.send('Its working');
+	res.send('Its working!');
 });
 
 app.get('/tokens/:tokenId', async (req, res) => {
