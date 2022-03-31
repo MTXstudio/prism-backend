@@ -6,11 +6,13 @@ import './helpers/fetch-polyfill';
 import { contractEventLoader } from './events/loader';
 import { json, urlencoded } from 'body-parser';
 import { Token } from 'interfaces/token';
+import cors from 'cors';
 
 const app = express();
 
 app.use(json());
 app.use(urlencoded({ extended: false }));
+app.use(cors());
 
 const firebaseApp = admin.initializeApp({
 	credential: admin.credential.cert({
