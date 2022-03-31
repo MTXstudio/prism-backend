@@ -47,11 +47,21 @@ const createTokens = async (
 	projectIds: string[],
 	collectionIds: string[],
 	maxSupplies: number[],
+	tokenUris: string[],
+	tokenTypes: number[],
 ) => {
 	//add tokens
 	let receipt;
 	try {
-		const tx = await contract.createTokens(names, prices, projectIds, collectionIds, maxSupplies);
+		const tx = await contract.createTokens(
+			names,
+			prices,
+			projectIds,
+			collectionIds,
+			maxSupplies,
+			tokenUris,
+			tokenTypes,
+		);
 		// The operation is NOT complete yet; we must wait until it is mined
 		receipt = await tx.wait();
 	} catch (e) {
@@ -122,15 +132,18 @@ const runScripts = async () => {
 			[projectId],
 			[collectionId],
 			[100],
+			['some uri'],
+			[0],
 		);
 		if (!receiptTokens)
 			throw new Error(`Failed to create tokens with the collection ids [${collectionId}]`);
-
-		console.log('', receiptTokens);
 	} catch (e) {
 		console.error(e);
-		process.exit(-1);
 	}
+	const address = await signer.getAddress();
+	const tokens = await contract.viewTokensOfAddress(address);
+	console.log(tokens);
+	process.exit(0);
 };
 
 runScripts();

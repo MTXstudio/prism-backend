@@ -17,11 +17,14 @@ export const config = {
 		port: process.env.PORT || 5000,
 	},
 	contract: {
-		address: '0x2A69AB2c7B4ac80aC0E45C6DA036F5dFc7433772',
+		address: '0xf0973726210A94392f83225D685F7e4F53f5Cffe',
 	},
 	firebase: {
 		projectId: process.env.FIREBASE_PROJECT_ID,
 		privateKey: (process.env.FIREBASE_PRIVATE_KEY as string).replace(/\\n/g, '\n'),
 		clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+		collectionNames: {
+			tokens: process.env.NODE_ENV === 'development' ? 'tokens-test' : 'tokens',
+		},
 	},
 };

@@ -17,19 +17,10 @@ const contract = new ethers.Contract(config.contract.address, abi, signer);
 
 export const contractEventLoader = async (db: firestore.Firestore) => {
 	// firestore.collection('yuser');
-	contract.on(
-		'Mint',
-		(
-			to: string,
-			tokenId: BigNumber,
-			collectionId: BigNumber,
-			invocations: BigNumber,
-			value: BigNumber,
-		) => {
-			console.log(colors.blue('Mint'));
-			mintListener({ to, collectionId, invocations, tokenId, value }, db);
-		},
-	);
+	contract.on('MasterEdit', (mNFT: number, traits: number[]) => {
+		console.log(colors.blue('Mint'));
+		mintListener({ mNFT, traits }, db);
+	});
 
 	// contract.on('ProjectCreated', (projectId: BigNumber, name: string) => {
 	// 	console.log(colors.yellow('ProjectCreated'));

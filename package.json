@@ -5,7 +5,6 @@
 	"license": "MIT",
 	"scripts": {
 		"start": "tsc && node dist/start.js",
-		"dev": "node dist/start.js",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"script": "ts-node ./src/scripts/prism-contract-script.ts"

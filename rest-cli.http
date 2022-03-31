@@ -10,5 +10,9 @@ GET http://127.0.0.1:5000/tokens HTTP/1.1
 content-type: application/json
 
 {
-    "traits": ["c","tds"]
+    "traits": ["1","23"]
 }
+
+###
+
+GET http://127.0.0.1:5000/tokens HTTP/1.1
