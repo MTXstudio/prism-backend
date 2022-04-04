@@ -1,5 +1,5 @@
 import admin, { firestore } from 'firebase-admin';
-import { config } from '../config/index';
+import { config } from '../../config/index';
 import fs from 'fs';
 
 const firebaseApp = admin.initializeApp({
@@ -30,4 +30,8 @@ const writeAllDocumentsInJsonFile = async (collectionName: string) => {
 	});
 };
 
-writeAllDocumentsInJsonFile('tokens-test');
+for (let i = 1; i < 41; i++) {
+	db.collection('tokens-test').doc(i.toString()).update({ tokenType: 1 });
+}
+
+// writeAllDocumentsInJsonFile('tokens-test');

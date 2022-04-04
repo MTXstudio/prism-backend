@@ -7,19 +7,23 @@
 		"start": "tsc && node dist/start.js",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
-		"contract-script": "ts-node ./src/scripts/prism-contract-script.ts",
-		"firestore-script": "ts-node ./src/scripts/firestore-script.ts"
+		"contract-script": "ts-node ./src/helpers/scripts/prism-contract-script.ts",
+		"firestore-script": "ts-node ./src/helpers/scripts/firestore-script.ts"
 	},
 	"devDependencies": {},
 	"dependencies": {
+		"@pinata/sdk": "^1.1.24",
 		"@tableland/sdk": "^0.0.1",
 		"@tsconfig/node16": "^1.0.2",
 		"@types/cors": "^2.8.12",
 		"@types/express": "^4.17.13",
+		"@types/morgan": "^1.9.3",
 		"@types/node": "^17.0.21",
 		"@types/node-fetch": "^2.6.1",
+		"@types/sharp": "^0.30.0",
 		"@typescript-eslint/eslint-plugin": "^5.15.0",
 		"@typescript-eslint/parser": "^5.15.0",
+		"axios": "^0.26.1",
 		"body-parser": "^1.19.2",
 		"colors": "^1.4.0",
 		"cors": "^2.8.5",
@@ -30,9 +34,11 @@
 		"ethers": "^5.6.1",
 		"express": "^4.17.3",
 		"firebase-admin": "^10.0.2",
+		"morgan": "^1.10.0",
 		"node-fetch": "2",
 		"nodemon": "^2.0.15",
 		"prettier": "^2.6.0",
+		"sharp": "^0.30.3",
 		"ts-node": "^10.7.0",
 		"typescript": "^4.6.2"
 	}

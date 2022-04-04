@@ -17,7 +17,7 @@ export const config = {
 		port: process.env.PORT || 5000,
 	},
 	contract: {
-		address: '0xf0973726210A94392f83225D685F7e4F53f5Cffe',
+		address: '0x7a2ffDc74520801764BDB6499DaD81f05384Bd33',
 	},
 	firebase: {
 		projectId: process.env.FIREBASE_PROJECT_ID,
@@ -26,5 +26,11 @@ export const config = {
 		collectionNames: {
 			tokens: process.env.NODE_ENV === 'development' ? 'tokens-test' : 'tokens',
 		},
+	},
+	pinata: {
+		apiKey: process.env.PINATA_API_KEY || '',
+		secretKey: process.env.PINATA_SECRET_KEY || '',
+		jwt: process.env.PINATA_JWT || '',
+		baseUrl: 'https://gateway.pinata.cloud/ipfs/',
 	},
 };

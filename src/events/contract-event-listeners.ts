@@ -3,7 +3,7 @@ import {
 	MintArgs,
 	ProjectCreatedArgs,
 	TokenCreatedArgs,
-} from 'types/event-types';
+} from '../helpers/types/event-types';
 import { firestore } from 'firebase-admin';
 
 // const db = getFirestore();

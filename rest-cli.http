@@ -16,3 +16,13 @@ content-type: application/json
 ###
 
 GET http://127.0.0.1:5000/tokens HTTP/1.1
+
+###
+
+PATCH http://localhost:5000/token HTTP/1.1
+content-type: application/json
+
+{
+    "traitIds": ["1","2"],
+    "masterId": "42"
+}

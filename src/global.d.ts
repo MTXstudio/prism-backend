@@ -1,3 +1,5 @@
+import { firestore } from 'firebase-admin';
+
 export declare global {
 	function fetch(url: RequestInfo, init?: RequestInit | undefined): Promise<Response>;
 	// eslint-disable-next-line no-var
@@ -6,4 +8,10 @@ export declare global {
 	var Request: Request;
 	// eslint-disable-next-line no-var
 	var Response: Response;
+
+	namespace Express {
+		interface Request {
+			db: firestore.Firestore;
+		}
+	}
 }
