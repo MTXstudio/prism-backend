@@ -8,6 +8,23 @@ import fs from 'fs';
 import pinataSDK from '@pinata/sdk';
 import { TokenType } from '../helpers/enums/token-type';
 
+const whiteListAddresses = [
+	'0xe93F7bAd98e3742cE5c046e58F7084165243725a',
+	'0xD93a5F13fbc22bC7733553FA3000b394C28485c5',
+	'0x17dF1FAfEFDb096Ff53230EaadaAd25FAfae8BD0',
+	'0x20c467db9b9fe0fa39d879b3f23c475582da2fba',
+	'0xf7791248951da4f9221fe4efa0a3a9825b48861d',
+	'0x6c7413E76cC6aE39a4B17dDD2b9B27b6C11cf359',
+	'0x1Ca7fD1aA6fC8afa541D4e5B049812B6cD976b09',
+	'0xCE8e2e39674da0A7bAcf1cD4BBCeC514404949f9',
+	'0x7cf6CAd5F7c5eB24BEA6d79EA082f986583926C4',
+	'0xC61813Dd7Af58Ce3439BE1D91F79469E5Dc1B326',
+	'0x6620DF04CFc6fC69E0969062F4c427cA3b4a7f90',
+	'0x67a32e5b2E3923f6575269b4F77055dD370bC629',
+	'0xe0bC3649F98a9c11407e14109440e7B70969E502',
+	'0x6fc933944c659f156B121DE0f54c50E22Eebe066',
+	'0xD6f360590FAa66F9E3CACDCf5CCa633cB3721D92',
+];
 const pinata = pinataSDK(config.pinata.apiKey, config.pinata.secretKey);
 // import pinataSDK from '@pinata/sdk';
 
@@ -15,6 +32,18 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
 	res.send('<h1>Welcome to1</h1>');
+});
+
+router.get('/whitelisted/:address', (req, res) => {
+	const { address } = req.params;
+	if (!address) return res.status(ErrorCode.BAD_REQUEST_400).send('address property not found.');
+
+	const foundAddress = whiteListAddresses.find((addr) => addr === address);
+	if (foundAddress) {
+		res.send(true);
+	} else {
+		res.send(false);
+	}
 });
 
 router.get('/tokens/traits', async (req, res) => {

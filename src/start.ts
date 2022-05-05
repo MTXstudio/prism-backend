@@ -27,6 +27,7 @@ const firebaseApp = admin.initializeApp({
 		clientEmail: config.firebase.clientEmail,
 	}),
 });
+
 const db = firebaseApp.firestore();
 
 // contractEventLoader(db);
