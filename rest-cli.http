@@ -3,17 +3,16 @@ GET http://127.0.0.1:5000/2 HTTP/1.1
 ###
 
 POST http://127.0.0.1:5000/token HTTP/1.1
-
-###
-
-GET http://127.0.0.1:5000/tokens HTTP/1.1
 content-type: application/json
 
 {
-    "traits": ["1","23"]
+    "description": "description", 
+    "external_url": "external_url", 
+    "image": "image", 
+    "name": "name", 
+    "attributes": [{"trait_type": "token type", "value": 1}, {"trait_type": "trait type", "value": "armour"}]
 }
-
-###
+###s
 
 GET http://127.0.0.1:5000/whitelisted/0xe93F7bAd98e3742cE5c046e58F7084165243725a HTTP/1.1
 
@@ -29,4 +28,4 @@ content-type: application/json
 
 ###
 
-GET http://127.0.0.1:5000/tokens HTTP/1.1
+GET http://127.0.0.1:5000/tokens?tokenIds=["1", "2"] HTTP/1.1

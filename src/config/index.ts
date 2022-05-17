@@ -24,7 +24,8 @@ export const config = {
 		privateKey: (process.env.FIREBASE_PRIVATE_KEY as string).replace(/\\n/g, '\n'),
 		clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
 		collectionNames: {
-			tokens: process.env.NODE_ENV === 'development' ? 'tokens-test' : 'tokens',
+			tokens:
+				process.env.NODE_ENV === 'development' ? 'tokens-betaspaceship' : 'tokens-betaspaceship',
 		},
 	},
 	pinata: {

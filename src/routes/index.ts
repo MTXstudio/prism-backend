@@ -26,7 +26,6 @@ const whiteListAddresses = [
 	'0xD6f360590FAa66F9E3CACDCf5CCa633cB3721D92',
 ];
 const pinata = pinataSDK(config.pinata.apiKey, config.pinata.secretKey);
-// import pinataSDK from '@pinata/sdk';
 
 const router = express.Router();
 
@@ -76,10 +75,13 @@ router.get('/tokens/:tokenId', async (req, res) => {
 	else res.status(ErrorCode.NOT_FOUND_404).send(`The token with the id ${tokenId} doesn't exists.`);
 });
 
-router.get('/tokens/:tokens', async (req, res) => {
-	const tokenIds = req.params.tokens;
+router.get('/tokens', async (req, res) => {
+	const tokenIdsString = req.query.tokenIds;
 
-	if (!tokenIds) return res.status(ErrorCode.BAD_REQUEST_400).send('Please provider trait ids.');
+	if (!tokenIdsString)
+		return res.status(ErrorCode.BAD_REQUEST_400).send('Please provider token ids.');
+
+	const tokenIds = JSON.parse(tokenIdsString as string);
 
 	let snapshot;
 	try {
@@ -104,19 +106,31 @@ router.get('/tokens/:tokens', async (req, res) => {
 });
 
 router.post('/token', async (req, res) => {
-	// db.collection('tokens').doc(tokenId)
-	let docRef;
+	const { description, external_url, image, name, attributes } = req.body;
+	console.log(req.body);
+
+	if (!description || !external_url || !image || !name || !attributes)
+		return res
+			.status(ErrorCode.BAD_REQUEST_400)
+			.send(
+				'Please pass these following properties with the body: description, external_url, image, name, attributes',
+			);
+
+	let doc;
 	try {
-		docRef = await req.db.collection(config.firebase.collectionNames.tokens).add({
-			name: (Math.random() + 1).toString(36).substring(7),
+		const docRef = await req.db.collection(config.firebase.collectionNames.tokens).add({
+			description,
+			external_url,
+			image,
+			name,
+			attributes,
 		});
+		doc = await docRef.get();
 	} catch (e) {
-		return res.send({ success: false, message: 'Failed to add a token' });
+		return res.status(ErrorCode.INTERNAL_SERVER_ERROR_500).send('Failed to create a token');
 	}
 
-	const doc = await docRef?.get();
-
-	res.json({ success: true, data: doc?.data() || {} });
+	res.json(doc.data());
 });
 
 router.patch('/token', async (req, res) => {
@@ -128,7 +142,10 @@ router.patch('/token', async (req, res) => {
 			.status(ErrorCode.BAD_REQUEST_400)
 			.send('Please provide following properies on body: traitIds & masterId');
 
-	const masterDocRef = req.db.collection(config.firebase.collectionNames.tokens).doc(masterId);
+	const masterDocRef = req.db
+		.collection(config.firebase.collectionNames.tokens)
+		.doc(masterId.toString());
+
 	const masterDoc = await masterDocRef.get();
 	if (!masterDoc.exists)
 		return res
@@ -136,7 +153,7 @@ router.patch('/token', async (req, res) => {
 			.send(`Master with the tokenId ${masterId} not found`);
 
 	const baseUrl =
-		'https://sentientmachine.mypinata.cloud/ipfs/Qmbg2pbztK7T4MKe886HSSjNK1Gz4H8v4xHqSdhpthaueB';
+		'https://algobits.mypinata.cloud/ipfs/QmWv6JsEV77UhzG6hLMjczuZ5seAiRN6TcGNRHg5JwR2KD/';
 
 	const imageUrls = traitIds.map((traitId: number) => `${baseUrl}/${traitId}.png`);
 	const imageCompositeList = [];
@@ -207,9 +224,8 @@ router.patch('/token', async (req, res) => {
 		}
 	});
 
-	let updateResult;
 	try {
-		updateResult = await masterDocRef.update({
+		await masterDocRef.update({
 			traitIds: traitIds,
 			image: config.pinata.baseUrl + fileInfo?.IpfsHash,
 		});
@@ -224,10 +240,7 @@ router.patch('/token', async (req, res) => {
 
 	//Upload to ipfs ->
 
-	res.send({
-		success: true,
-		fileInfo,
-	});
+	res.send(fileInfo);
 });
 
 export default router;
