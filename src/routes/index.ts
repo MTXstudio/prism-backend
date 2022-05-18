@@ -12,6 +12,7 @@ const whiteListAddresses = [
 	'0x6BbEF4ce6Fa65d1f009918B00240AB009b40552a',
 	'0x7C5CC6d1dC1a297CFbb71A37e1c7a72F519204C1',
 	'0x10836d93f39CC896651C210084f98b63E1055529',
+	'0xD6f360590FAa66F9E3CACDCf5CCa633cB3721D92',
 ];
 const pinata = pinataSDK(config.pinata.apiKey, config.pinata.secretKey);
 
