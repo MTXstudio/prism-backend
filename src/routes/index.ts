@@ -87,26 +87,31 @@ router.get('/tokens', async (req, res) => {
 
 	const tokenIds = JSON.parse(tokenIdsString as string);
 
-	let snapshot;
-	try {
-		snapshot = await req.db
-			.collection(config.firebase.collectionNames.tokens)
-			.where(firestore.FieldPath.documentId(), 'in', tokenIds)
-			.get();
-	} catch (e) {
-		console.error(e);
-		return res.status(ErrorCode.INTERNAL_SERVER_ERROR_500).send({
-			success: false,
-			message: `Failed to retrieve tokens with the ids ${tokenIds}.`,
-		});
+	const collectionReference = req.db.collection(config.firebase.collectionNames.tokens);
+	const batches = [];
+
+	while (tokenIds.length) {
+		const batch = tokenIds.splice(0, 10);
+		batches.push(
+			collectionReference
+				.where(firestore.FieldPath.documentId(), 'in', [...batch])
+				.get()
+				.then((results) => results.docs.map((result) => ({ ...result.data() }))),
+		);
 	}
 
-	const docs: firestore.DocumentData[] = [];
-	snapshot.forEach((doc) => {
-		docs.push(doc.data());
-	});
+	let tokens;
+	try {
+		tokens = await Promise.all(batches).then((content) => content.flat());
+	} catch (e) {
+		console.error(e);
+		return res
+			.status(ErrorCode.INTERNAL_SERVER_ERROR_500)
+			.send(`Failed to retrieve tokens with the ids ${tokenIds}.`);
+	}
+	console.log(tokens);
 
-	res.send(docs);
+	res.json(tokens);
 });
 
 router.post('/token', async (req, res) => {
@@ -157,7 +162,7 @@ router.patch('/token', async (req, res) => {
 			.send(`Master with the tokenId ${masterId} not found`);
 
 	const baseUrl =
-		'https://algobits.mypinata.cloud/ipfs/QmWv6JsEV77UhzG6hLMjczuZ5seAiRN6TcGNRHg5JwR2KD/';
+		'https://algobits.mypinata.cloud/ipfs/QmUwLRoyf3fqrY8QEc3TrKvmS5r1YVsZBiRi17fC8ptpp7/';
 
 	const imageUrls = traitIds.map((traitId: number) => `${baseUrl}/${traitId}.png`);
 	const imageCompositeList = [];
