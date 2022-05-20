@@ -41,7 +41,10 @@ router.get('/whitelisted/:address', (req, res) => {
 	const { address } = req.params;
 	if (!address) return res.status(ErrorCode.BAD_REQUEST_400).send('address property not found.');
 
-	const foundAddress = whiteListAddresses.find((addr) => addr === address);
+	const foundAddress = whiteListAddresses.find(
+		(addr) => addr.toLowerCase() === address.toLowerCase(),
+	);
+
 	if (foundAddress) {
 		res.send(true);
 	} else {
