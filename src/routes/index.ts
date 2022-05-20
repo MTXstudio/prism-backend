@@ -28,7 +28,9 @@ const whiteListAddresses = [
 	'0xe0bC3649F98a9c11407e14109440e7B70969E502',
 	'0x6fc933944c659f156B121DE0f54c50E22Eebe066',
 	'0x016546408c22259CeC9BaA4F442a64a5cA161701',
+	'0x3FDbEeDCBfd67Cbc00FC169FCF557F77ea4ad4Ed'
 ];
+
 const pinata = pinataSDK(config.pinata.apiKey, config.pinata.secretKey);
 
 const router = express.Router();
