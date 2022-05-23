@@ -1,10 +1,22 @@
 import dotenv from 'dotenv';
+import { ethers } from 'ethers';
+import projectAbi from '../project-abi.json';
+import tokenAbi from '../token-abi.json';
 dotenv.config();
 
 // if (!process.env.ALCHEMY_KEY || !process.env.WALLET_PRIVATE_KEY) {
 // 	console.log('process.env.ALCHEMY_KEY or process.env.WALLET_PRIVATE_KEY is undefined');
 // 	process.exit(-1);
 // }
+
+const projectContractAddress = '0x469D67405f4AFDe9b72F90D1a68572A76a2883EE';
+const tokenContractAddress = '0xC71952Ae6dD074e1a915dfF4E3a27456526d61f1';
+
+const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
+
+const signer = provider.getSigner();
+const projectContract = new ethers.Contract(projectContractAddress, projectAbi, signer);
+const tokenContract = new ethers.Contract(tokenContractAddress, tokenAbi, signer);
 
 export const config = {
 	alchemy: {
@@ -17,7 +29,8 @@ export const config = {
 		port: process.env.PORT || 5000,
 	},
 	contract: {
-		address: '0x7a2ffDc74520801764BDB6499DaD81f05384Bd33',
+		project: projectContract,
+		token: tokenContract,
 	},
 	firebase: {
 		projectId: process.env.FIREBASE_PROJECT_ID,

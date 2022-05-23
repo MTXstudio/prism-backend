@@ -1,23 +1,10 @@
-// import { Connection } from '@tableland/sdk';
-import { BigNumber, ethers } from 'ethers';
-import { config } from '../config/index';
-import abi from '../abi.json';
-import {
-	collectionCreatedListener,
-	mintListener,
-	projectCreatedListener,
-	tokenCreatedListener,
-} from './contract-event-listeners';
+import { mintListener } from './contract-event-listeners';
 import colors from 'colors';
 import { firestore } from 'firebase-admin';
-
-const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
-const signer = provider.getSigner();
-const contract = new ethers.Contract(config.contract.address, abi, signer);
+import { config } from '../config/index';
 
 export const contractEventLoader = async (db: firestore.Firestore) => {
-	// firestore.collection('yuser');
-	contract.on('MasterEdit', (mNFT: number, traits: number[]) => {
+	config.contract.project.on('MasterEdit', (mNFT: number, traits: number[]) => {
 		console.log(colors.blue('Mint'));
 		mintListener({ mNFT, traits }, db);
 	});

@@ -1,4 +1,4 @@
-import express, { Express, Request } from 'express';
+import express from 'express';
 import admin from 'firebase-admin';
 import { config } from './config/index';
 import './helpers/fetch-polyfill';
@@ -6,6 +6,7 @@ import { json, urlencoded } from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 import routes from './routes/index';
+import { contractEventLoader } from './events/loader';
 
 const app = express();
 app.use(json());
@@ -30,32 +31,15 @@ const firebaseApp = admin.initializeApp({
 
 const db = firebaseApp.firestore();
 
-// contractEventLoader(db);
-app.use((req, res, next) => {
-	if (!req.db) req.db = db;
-	next();
-});
+// app.use((req, res, next) => {
+// 	if (!req.db) req.db = db;
+// 	next();
+// });
 
-app.use(routes);
+// app.use(routes);
+
+contractEventLoader(db);
 
 app.listen(config.server.port, () =>
 	console.log(`The Server is listening to ${config.server.port}`),
 );
-
-// const tbl = await connectToTableLand();
-// if (!tbl) process.exit(-1);
-// const tables = await tbl.list();
-
-// console.log('tables', tables[tables.length - 1]);
-
-// if (tables.length === 0 || true) {
-// 	// await tbl.create(projectTableScript(), {
-// 	// 	description: 'In this table are stored all the nft projects',
-// 	// });
-// 	await tbl.create(collectionTableScript(), {
-// 		description: 'In this table are stored all the nft collections',
-// 	});
-// 	// await tbl.create(tokenTableScript(), {
-// 	// 	description: 'In this table are stored all the nft tokens',
-// 	// });
-// }
