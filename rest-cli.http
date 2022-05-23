@@ -14,7 +14,7 @@ content-type: application/json
 }
 ###s
 
-GET http://127.0.0.1:5000/whitelisted/0xe93F7bAd98e3742cE5c046e58F7084165243725a HTTP/1.1
+GET http://127.0.0.1:5000/whitelisted/0x3Ad08954690E344B980BFebDa171641Be10878D0 HTTP/1.1
 
 ###
 

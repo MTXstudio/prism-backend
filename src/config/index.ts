@@ -36,4 +36,7 @@ export const config = {
 		jwt: process.env.PINATA_JWT || '',
 		baseUrl: 'https://gateway.pinata.cloud/ipfs/',
 	},
+	google: {
+		apiKey: process.env.GOOGLE_API_KEY,
+	},
 };
