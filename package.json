@@ -4,13 +4,17 @@
 	"main": "start.ts",
 	"license": "MIT",
 	"scripts": {
-		"start": "tsc && node dist/start.js",
+		"build": "npx tsc",
+		"start": "node ./dist/start.js",
+		"dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/start.js\"",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"contract-script": "ts-node ./src/helpers/scripts/prism-contract-script.ts",
 		"firestore-script": "ts-node ./src/helpers/scripts/firestore-script.ts"
 	},
-	"devDependencies": {},
+	"devDependencies": {
+		"concurrently": "^7.2.1"
+	},
 	"dependencies": {
 		"@pinata/sdk": "^1.1.24",
 		"@tableland/sdk": "^0.0.1",
