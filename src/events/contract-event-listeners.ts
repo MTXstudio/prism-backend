@@ -10,10 +10,7 @@ import { firestore } from 'firebase-admin';
 // const projectsCollection = db.collection('projects');
 // const projectsCollection = db.collection('projects');
 
-export const mintListener = async (
-	args: { mNFT: number; traits: number[] },
-	db: firestore.Firestore,
-) => {
+export const mintListener = async (args: { mNFT: number; traits: number[] }) => {
 	// projectsCollection.add({ name: 'Giorgi' });
 
 	console.log(args);

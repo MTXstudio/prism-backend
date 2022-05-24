@@ -1,46 +1,54 @@
-import { mintListener } from './contract-event-listeners';
-import colors from 'colors';
-import { firestore } from 'firebase-admin';
 import { config } from '../config/index';
+import { BigNumber } from '@ethersproject/bignumber';
 
-export const contractEventLoader = async (db: firestore.Firestore) => {
-	config.contract.project.on('MasterEdit', (mNFT: number, traits: number[]) => {
-		console.log(colors.blue('Mint'));
-		mintListener({ mNFT, traits }, db);
+enum AssetType {
+	MASTER,
+	TRAIT,
+	OTHER,
+}
+
+export const contractEventLoader = async () => {
+	config.contract.project.on(
+		'ProjectCreated',
+		(id: BigNumber, name: string, chef: string, traitTypes: string[]) => {
+			// project created
+		},
+	);
+
+	config.contract.project.on(
+		'CollectionCreated',
+		(
+			name: string,
+			id: BigNumber,
+			projectId: BigNumber,
+			royalties: BigNumber,
+			manager: string,
+			maxInvocation: BigNumber,
+			assetType: AssetType,
+			paused: boolean,
+		) => {
+			//collection created
+		},
+	);
+
+	config.contract.token.on(
+		'TokenCreated',
+		(
+			name: string,
+			id: BigNumber,
+			projectId: BigNumber,
+			collectionId: BigNumber,
+			priceInWei: BigNumber,
+			maxSupply: BigNumber,
+			traitType: string,
+			assetType: AssetType,
+			paused: boolean,
+		) => {
+			// Token created
+		},
+	);
+
+	config.contract.token.on('MasterEdit', (masterId: BigNumber, traits: BigNumber[]) => {
+		// Edit master Id
 	});
-
-	// contract.on('ProjectCreated', (projectId: BigNumber, name: string) => {
-	// 	console.log(colors.yellow('ProjectCreated'));
-	// 	projectCreatedListener({ name, projectId }, db);
-	// });
-
-	// contract.on(
-	// 	'CollectionCreated',
-	// 	(name: string, collectionId: BigNumber, projectId: BigNumber, maxInvocation: BigNumber) => {
-	// 		console.log(colors.red('CollectionCreated'));
-	// 		collectionCreatedListener({ name, collectionId, projectId, maxInvocation }, db);
-	// 	},
-	// );
-
-	// contract.on(
-	// 	'TokenCreated',
-	// 	(
-	// 		name: string,
-	// 		tokenId: BigNumber,
-	// 		projectId: BigNumber,
-	// 		collectionId: BigNumber,
-	// 		price: BigNumber,
-	// 		maxSupply: BigNumber,
-	// 	) => {
-	// 		console.log(colors.cyan('TokenCreated'));
-	// 		tokenCreatedListener({
-	// 			collectionId,
-	// 			maxSupply,
-	// 			name,
-	// 			price,
-	// 			projectId,
-	// 			tokenId,
-	// 		});
-	// 	},
-	// );
 };
