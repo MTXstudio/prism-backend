@@ -52,4 +52,14 @@ export const config = {
 	google: {
 		apiKey: process.env.GOOGLE_API_KEY,
 	},
+	postgres: {
+		user: 'postgres',
+		pwd: 'postgres',
+		port: 5432,
+		host:
+			process.env.NODE_ENV === 'development'
+				? 'localhost'
+				: 'prism-database.c6nypigkviq4.eu-central-1.rds.amazonaws.com',
+		dbName: '',
+	},
 };

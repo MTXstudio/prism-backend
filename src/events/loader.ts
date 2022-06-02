@@ -1,5 +1,6 @@
 import { config } from '../config/index';
 import { BigNumber } from '@ethersproject/bignumber';
+import Project from '../models/project.model';
 
 enum AssetType {
 	MASTER,
@@ -10,8 +11,14 @@ enum AssetType {
 export const contractEventLoader = async () => {
 	config.contract.project.on(
 		'ProjectCreated',
-		(id: BigNumber, name: string, chef: string, traitTypes: string[]) => {
-			// project created
+		async (
+			id: BigNumber,
+			name: string,
+			chef: string,
+			traitTypes: string[],
+			description: string,
+		) => {
+			//
 		},
 	);
 
