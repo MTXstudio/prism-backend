@@ -27,7 +27,7 @@ const start = async () => {
 		dialect: 'postgres',
 		host: config.postgres.host,
 		port: config.postgres.port as number,
-		models: [path.resolve(__dirname, './/models/**/*.model.ts')],
+		models: [path.resolve(__dirname, './models/**/*.model.ts')],
 		logging: false,
 	};
 	if (process.env.NODE_ENV !== 'development') {
