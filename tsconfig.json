@@ -5,7 +5,7 @@
 		"lib": ["es5", "ESNext"],
 		"resolveJsonModule": true,
 		"esModuleInterop": true,
-		"baseUrl": "./",
+		"baseUrl": "./src",
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
 		"strictPropertyInitialization": false
