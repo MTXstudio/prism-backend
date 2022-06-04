@@ -8,11 +8,23 @@ dotenv.config();
 // 	console.log('process.env.ALCHEMY_KEY or process.env.WALLET_PRIVATE_KEY is undefined');
 // 	process.exit(-1);
 // }
+if (
+	process.env.NODE_ENV !== 'development' &&
+	!process.env.HEROKU_PG_USERNAME &&
+	!process.env.HEROKU_PG_PWD
+) {
+	console.error('Please provide heroku user & password for production.');
+	process.exit(-1);
+} else if (!process.env.ALCHEMY_KEY) {
+	console.error('Please provide an alchemy api key.');
+	process.exit(-1);
+}
+const projectContractAddress = '0xBE921c99C563141de9802e7888906BFd7b3514E4';
+const tokenContractAddress = '0x478a2F0fc28C33F9a6cDC464C3453F7f290deE90';
 
-const projectContractAddress = '0x469D67405f4AFDe9b72F90D1a68572A76a2883EE';
-const tokenContractAddress = '0xC71952Ae6dD074e1a915dfF4E3a27456526d61f1';
-
-const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
+const provider = new ethers.providers.JsonRpcProvider(
+	`https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_KEY}`,
+);
 
 const signer = provider.getSigner();
 const projectContract = new ethers.Contract(projectContractAddress, projectAbi, signer);
@@ -53,13 +65,14 @@ export const config = {
 		apiKey: process.env.GOOGLE_API_KEY,
 	},
 	postgres: {
-		user: 'postgres',
-		pwd: 'postgres',
-		port: 5432,
-		host:
-			process.env.NODE_ENV === 'development'
-				? 'localhost'
-				: 'prism-database.c6nypigkviq4.eu-central-1.rds.amazonaws.com',
-		dbName: '',
+		user: process.env.NODE_ENV === 'development' ? 'postgres' : process.env.HEROKU_PG_USERNAME,
+		pwd: process.env.NODE_ENV === 'development' ? 'postgres' : process.env.HEROKU_PG_PWD,
+		port: process.env.NODE_ENV === 'development' ? 5432 : process.env.HEROKU_PG_PORT,
+		host: process.env.NODE_ENV === 'development' ? 'localhost' : process.env.HEROKU_PG_HOST,
+		dbName: process.env.NODE_ENV === 'development' ? 'postgres' : process.env.HEROKU_PG_DB,
+		// connectionUrl:
+		// 	process.env.NODE_ENV === 'development'
+		// 		? `postgres://postgres:postgres@localhost:5432/postgres`
+		// 		: process.env.HEROKU_PG_CONNECTIONU_URL + '?sslmode=require',
 	},
 };

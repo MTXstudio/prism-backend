@@ -15,16 +15,16 @@ export default class Collection extends Model {
 	name: string;
 
 	@Column
-	roaylties: number;
+	royalties: number;
 
 	@Column
-	maxSupply: number;
+	maxInvocation: number;
 
 	@Column
 	manager: string;
 
 	@Column
-	collectionType: number;
+	assetType: number;
 
 	@Column
 	paused: boolean;

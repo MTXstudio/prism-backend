@@ -201,14 +201,8 @@ router.patch('/token', async (req, res) => {
 		console.error(e);
 		return res.status(ErrorCode.INTERNAL_SERVER_ERROR_500).send('Failed to upload a file to ipfs.');
 	}
-	// get content identifier
-	console.log(
-		'Update master nft where CID->',
-		fileInfo?.IpfsHash,
-		' and ',
-		'master id -> ',
-		masterId,
-	);
+
+	console.log(`Update master nft where CID-> ${fileInfo?.IpfsHash} and master id ${masterId}`);
 
 	// delete composed file
 	fs.unlink('./composite.png', (err) => {

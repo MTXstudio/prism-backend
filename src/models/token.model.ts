@@ -15,7 +15,7 @@ export default class Token extends Model {
 	name: string;
 
 	@Column
-	amount: number;
+	maxSupply: number;
 
 	@Column
 	amountMinted: number;
