@@ -34,7 +34,7 @@ const start = async () => {
 		options.dialectOptions = {
 			ssl: {
 				require: true,
-				rejectUnauthorized: false, // <<<<<<< YOU NEED THIS
+				rejectUnauthorized: false,
 			},
 		};
 	}

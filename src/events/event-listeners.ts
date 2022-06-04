@@ -50,9 +50,8 @@ export const collectionCreatedListener = async (
 ) => {
 	const foundCollection = await Collection.findByPk(id.toNumber());
 	if (!foundCollection) {
-		let collection;
 		try {
-			collection = await Collection.create({
+			await Collection.create({
 				id,
 				name,
 				projectId,
@@ -86,9 +85,8 @@ export const tokenCreatedListener = async (
 	const foundToken = await Token.findByPk(id.toNumber());
 
 	if (!foundToken) {
-		let token;
 		try {
-			token = await Token.create({
+			await Token.create({
 				name,
 				id,
 				collectionId,
