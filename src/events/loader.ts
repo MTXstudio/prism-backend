@@ -1,18 +1,10 @@
 import { config } from '../config/index';
-import { BigNumber } from '@ethersproject/bignumber';
-import Project from '../models/project.model';
 import {
 	collectionCreatedListener,
 	masterEditListener,
 	projectCreatedListener,
 	tokenCreatedListener,
 } from './event-listeners';
-
-enum AssetType {
-	MASTER,
-	TRAIT,
-	OTHER,
-}
 
 export const contractEventLoader = async () => {
 	config.contract.project.on('ProjectCreated', projectCreatedListener);
