@@ -73,6 +73,21 @@ router.get('/projects', async (req, res) => {
 	res.json(projects);
 });
 
+router.get('/collections/:projectId', async (req, res) => {
+	const { projectId } = req.params;
+	let collections;
+	try {
+		collections = await Collection.findAll({ where: { projectId } });
+	} catch (e) {
+		console.error(`Failed to get collection based on the project id ${projectId}. ${e}`);
+		return res
+			.status(ErrorCode.INTERNAL_SERVER_ERROR_500)
+			.send(`Failed to get collections based on ${projectId} from databse.`);
+	}
+
+	res.json(collections);
+});
+
 router.post('/collection', async (req, res) => {
 	const { id, name, projectId, royalties, manager, maxInvocation, assetType, paused } = req.body;
 
@@ -125,7 +140,7 @@ router.get('/collection/:id', async (req, res) => {
 
 	let collection;
 	try {
-		collection = await Collection.findByPk(id);
+		collection = await Collection.findByPk(Number(id));
 	} catch (e) {
 		console.error(`Failed to get a collection by the id ${id}. ${e}`);
 		return res
@@ -177,6 +192,29 @@ router.patch('/collection', async (req, res) => {
 			.send(`Failed to update a collection with the update body ${req.body}.`);
 	}
 	res.json(collection);
+});
+
+router.get('/tokens', async (req, res) => {
+	const { collectionId } = req.query;
+	if (!collectionId)
+		return res.status(ErrorCode.INTERNAL_SERVER_ERROR_500).send('Query paramenters are missing.');
+
+	let tokens;
+
+	try {
+		tokens = await Token.findAll({
+			where: {
+				collectionId: Number(collectionId),
+			},
+		});
+	} catch (e) {
+		console.error(`Couldn't retrieve tokens for collection id ${collectionId}. ${e}`);
+		return res
+			.status(ErrorCode.INTERNAL_SERVER_ERROR_500)
+			.send(`Failed to fetching tokens for the colleciton id ${collectionId}.`);
+	}
+
+	res.send(tokens);
 });
 
 router.post('/token', async (req, res) => {
