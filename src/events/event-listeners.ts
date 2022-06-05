@@ -2,7 +2,6 @@ import { BigNumber } from 'ethers';
 import Collection from '../models/collection.model';
 import Project from '../models/project.model';
 import Token from '../models/token.model';
-import { CollectionCreatedArgs, TokenCreatedArgs } from '../helpers/types/event-types';
 import axios from 'axios';
 import sharp from 'sharp';
 import fs from 'fs';
@@ -10,6 +9,7 @@ import pinataSDK from '@pinata/sdk';
 import { config } from '../config/index';
 
 const pinata = pinataSDK(config.pinata.apiKey, config.pinata.secretKey);
+
 enum AssetType {
 	MASTER,
 	TRAIT,
@@ -24,9 +24,8 @@ export const projectCreatedListener = async (
 ) => {
 	const foundProject = await Project.findByPk(id.toNumber());
 	if (!foundProject) {
-		let project;
 		try {
-			project = await Project.create({ id, name, owner, traitTypes });
+			await Project.create({ id: id.toNumber(), name, owner, traitTypes });
 		} catch (e) {
 			return console.error(
 				`Failed to save a project with the name ${name} for the owner ${owner}. ${e}`,
@@ -52,11 +51,11 @@ export const collectionCreatedListener = async (
 	if (!foundCollection) {
 		try {
 			await Collection.create({
-				id,
+				id: id.toNumber(),
 				name,
-				projectId,
-				royalties,
-				maxInvocation,
+				projectId: projectId.toNumber(),
+				royalties: royalties.toNumber(),
+				maxInvocation: maxInvocation.toNumber(),
 				manager,
 				assetType,
 				paused: false,
@@ -67,7 +66,7 @@ export const collectionCreatedListener = async (
 			);
 		}
 		console.log(
-			`Successfully created a collection for the project id ${projectId} with the project id ${id.toNumber()}.`,
+			`Successfully created a collection for the project id ${projectId} with the collection id ${id.toNumber()}.`,
 		);
 	} else console.log(`Collection with the id already exists ${foundCollection.id}`);
 };
@@ -88,10 +87,10 @@ export const tokenCreatedListener = async (
 		try {
 			await Token.create({
 				name,
-				id,
-				collectionId,
-				priceInWei,
-				maxSupply,
+				id: id.toNumber(),
+				collectionId: collectionId.toNumber(),
+				priceInWei: priceInWei.toNumber(),
+				maxSupply: maxSupply.toNumber(),
 				amountMinted: 0,
 				traitType: traitType,
 				paused: false,
@@ -171,7 +170,7 @@ export const masterEditListener = async (id: BigNumber, traitsBigNumbers: BigNum
 
 	try {
 		await masterToken.update({
-			traitIds: traitIds,
+			traitIds,
 			image: config.pinata.baseUrl + fileInfo?.IpfsHash,
 		});
 	} catch (e) {
@@ -215,10 +214,10 @@ export const collectionEditListener = async (
 	try {
 		await foundCollection.update({
 			name,
-			projectId,
-			royalties,
+			projectId: projectId.toNumber(),
+			royalties: royalties.toNumber(),
 			manager,
-			maxInvocation,
+			maxInvocation: maxInvocation.toNumber(),
 			assetType,
 			paused,
 		});
