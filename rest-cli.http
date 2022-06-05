@@ -12,7 +12,7 @@ content-type: application/json
 }
 
 ###
-GET http://127.0.0.1:5000/api/v2/project/0 HTTP/1.1
+GET http://127.0.0.1:5000/api/v2/project/11 HTTP/1.1
 
 ###
 POST http://127.0.0.1:5000/api/v2/collection HTTP/1.1
@@ -30,7 +30,7 @@ content-type: application/json
 }
 
 ###
-GET http://127.0.0.1:5000/api/v2/collection/1 HTTP/1.1
+GET http://127.0.0.1:5000/api/v2/collection/3 HTTP/1.1
 
 ###
 PATCH  http://127.0.0.1:5000/api/v2/project HTTP/1.1
@@ -71,3 +71,6 @@ Content-Type: application/json
     "traitIds": [0, 1, 2],
     "masterId": 7
 }
+
+###
+GET http://127.0.0.1:5000/api/v2/tokens?collectionId=0
