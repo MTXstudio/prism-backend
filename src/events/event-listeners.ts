@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
-import Collection from '../models/collection.model';
-import Project from '../models/project.model';
-import Token from '../models/token.model';
+import { Collection } from '../models/collection.model';
+import { Project } from '../models/project.model';
+import { Token } from '../models/token.model';
 import axios from 'axios';
 import sharp from 'sharp';
 import fs from 'fs';
@@ -18,6 +18,7 @@ enum AssetType {
 
 export const projectCreatedListener = async (
 	id: BigNumber,
+	description: string,
 	name: string,
 	owner: string,
 	traitTypes: string[],
@@ -25,7 +26,7 @@ export const projectCreatedListener = async (
 	const foundProject = await Project.findByPk(id.toNumber());
 	if (!foundProject) {
 		try {
-			await Project.create({ id: id.toNumber(), name, owner, traitTypes });
+			await Project.create({ id: id.toNumber(), name, owner, traitTypes, description });
 		} catch (e) {
 			return console.error(
 				`Failed to save a project with the name ${name} for the owner ${owner}. ${e}`,
@@ -38,9 +39,10 @@ export const projectCreatedListener = async (
 };
 
 export const collectionCreatedListener = async (
-	name: string,
 	id: BigNumber,
 	projectId: BigNumber,
+	name: string,
+	description: string,
 	royalties: BigNumber,
 	manager: string,
 	maxInvocation: BigNumber,
@@ -59,6 +61,7 @@ export const collectionCreatedListener = async (
 				manager,
 				assetType,
 				paused: false,
+				description,
 			});
 		} catch (e) {
 			return console.error(
@@ -183,6 +186,7 @@ export const masterEditListener = async (id: BigNumber, traitsBigNumbers: BigNum
 
 export const projectEditListener = async (
 	id: BigNumber,
+	description: string,
 	name: string,
 	owner: string,
 	traitTypes: string[],
@@ -191,7 +195,7 @@ export const projectEditListener = async (
 	if (!foundProject) return console.log(`ProjectEdit: Project not found`);
 
 	try {
-		await foundProject.update({ name, owner, traitTypes });
+		await foundProject.update({ name, owner, traitTypes, description });
 	} catch (e) {
 		return console.error(`Failed to update a project with the id ${id.toNumber()}. ${e}`);
 	}
@@ -199,9 +203,10 @@ export const projectEditListener = async (
 };
 
 export const collectionEditListener = async (
-	name: string,
 	id: BigNumber,
 	projectId: BigNumber,
+	name: string,
+	description: string,
 	royalties: BigNumber,
 	manager: string,
 	maxInvocation: BigNumber,
@@ -220,6 +225,7 @@ export const collectionEditListener = async (
 			maxInvocation: maxInvocation.toNumber(),
 			assetType,
 			paused,
+			description,
 		});
 	} catch (e) {
 		return console.error(`Failed to update a project with the id ${id.toNumber()}. ${e}`);
