@@ -1,8 +1,8 @@
 import express, { Request } from 'express';
 import { ErrorCode } from '../helpers/enums/error-code';
-import Project from '../models/project.model';
-import Collection from '../models/collection.model';
-import Token from '../models/token.model';
+import { Project } from '../models/project.model';
+import { Collection } from '../models/collection.model';
+import { Token } from '../models/token.model';
 import axios from 'axios';
 import sharp from 'sharp';
 import fs from 'fs';
@@ -116,6 +116,7 @@ router.post('/collection', async (req, res) => {
 			manager,
 			assetType,
 			paused: false,
+			description: '',
 		});
 	} catch (e) {
 		console.error(
@@ -150,6 +151,7 @@ router.get('/collection/:id', async (req, res) => {
 
 	res.send(collection);
 });
+
 router.patch('/project', async (req, res) => {
 	const { id } = req.body;
 	const keys = Object.keys(req.body);

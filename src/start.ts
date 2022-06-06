@@ -27,8 +27,9 @@ const start = async () => {
 		dialect: 'postgres',
 		host: config.postgres.host,
 		port: config.postgres.port as number,
-		models: [path.resolve(__dirname, './models/*.model.*')],
-		modelMatch: (filename, member) => true,
+		models: [path.resolve(__dirname, './models/*.model.ts')],
+		modelMatch: (filename, member) =>
+			filename.substring(0, filename.indexOf('.model')) === member.toLowerCase(),
 		logging: false,
 	};
 	if (process.env.NODE_ENV !== 'development') {
