@@ -19,8 +19,8 @@ if (
 	console.error('Please provide an alchemy api key.');
 	process.exit(-1);
 }
-const projectContractAddress = '0xBE921c99C563141de9802e7888906BFd7b3514E4';
-const tokenContractAddress = '0x478a2F0fc28C33F9a6cDC464C3453F7f290deE90';
+const projectContractAddress = '0xe957a12c5546808E8E071EC5b910f0EF59554D99';
+const tokenContractAddress = '0x5CfAc860BE6Ad5e770e7E5D9fa31Fb255Ec6b4b4';
 
 const provider = new ethers.providers.JsonRpcProvider(
 	`https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_KEY}`,
