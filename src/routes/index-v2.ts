@@ -82,10 +82,10 @@ router.get('/collections/:projectId', async (req, res) => {
 		console.error(`Failed to get collection based on the project id ${projectId}. ${e}`);
 		return res
 			.status(ErrorCode.INTERNAL_SERVER_ERROR_500)
-			.send(`Failed to get collections based on ${projectId} from databse.`);
+			.send(`Failed to get collections based on ${projectId} from database.`);
 	}
 
-	res.json(collections);
+	res.json(collections || []);
 });
 
 router.post('/collection', async (req, res) => {
