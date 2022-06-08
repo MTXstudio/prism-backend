@@ -5,8 +5,8 @@ interface ICollection {
 	id: number;
 	projectId: number;
 	name: string;
-	royalties: number;
-	maxInvocation: number;
+	royalties: string;
+	maxInvocation: string;
 	manager: string;
 	assetType: number;
 	paused: boolean;
@@ -27,10 +27,10 @@ export class Collection extends Model<ICollection> {
 	name: string;
 
 	@Column
-	royalties: number;
+	royalties: string;
 
 	@Column
-	maxInvocation: number;
+	maxInvocation: string;
 
 	@Column
 	manager: string;
