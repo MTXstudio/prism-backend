@@ -7,14 +7,9 @@ import sharp from 'sharp';
 import fs from 'fs';
 import pinataSDK from '@pinata/sdk';
 import { config } from '../config/index';
+import { AssetType } from 'helpers/enums/asset-type';
 
 const pinata = pinataSDK(config.pinata.apiKey, config.pinata.secretKey);
-
-enum AssetType {
-	MASTER,
-	TRAIT,
-	OTHER,
-}
 
 export const projectCreatedListener = async (
 	id: BigNumber,
@@ -56,8 +51,8 @@ export const collectionCreatedListener = async (
 				id: id.toNumber(),
 				name,
 				projectId: projectId.toNumber(),
-				royalties: royalties.toNumber(),
-				maxInvocation: maxInvocation.toNumber(),
+				royalties: royalties.toString(),
+				maxInvocation: maxInvocation.toString(),
 				manager,
 				assetType,
 				paused: false,
@@ -74,10 +69,11 @@ export const collectionCreatedListener = async (
 	} else console.log(`Collection with the id already exists ${foundCollection.id}`);
 };
 export const tokenCreatedListener = async (
-	name: string,
 	id: BigNumber,
 	projectId: BigNumber,
 	collectionId: BigNumber,
+	name: string,
+	description: string,
 	priceInWei: BigNumber,
 	maxSupply: BigNumber,
 	traitType: string,
@@ -95,8 +91,10 @@ export const tokenCreatedListener = async (
 				priceInWei: priceInWei.toNumber(),
 				maxSupply: maxSupply.toNumber(),
 				amountMinted: 0,
-				traitType: traitType,
-				paused: false,
+				traitType,
+				paused,
+				description,
+				assetType,
 			});
 		} catch (e) {
 			return console.error(
@@ -104,7 +102,7 @@ export const tokenCreatedListener = async (
 			);
 		}
 		console.log(
-			`Successfully created a collection for the project id ${projectId} with the project id ${id.toNumber()}.`,
+			`Successfully created a token for the collection id ${collectionId} with the token id ${id.toNumber()}.`,
 		);
 	} else console.log(`Token with the id already exists ${foundToken.id}`);
 };
@@ -216,19 +214,55 @@ export const collectionEditListener = async (
 	const foundCollection = await Collection.findByPk(id.toNumber());
 	if (!foundCollection) return console.log(`CollectionEdit: Collection not found`);
 
+	console.log('paused', paused);
 	try {
 		await foundCollection.update({
 			name,
 			projectId: projectId.toNumber(),
-			royalties: royalties.toNumber(),
+			royalties: royalties.toString(),
 			manager,
-			maxInvocation: maxInvocation.toNumber(),
+			maxInvocation: maxInvocation.toString(),
 			assetType,
 			paused,
 			description,
 		});
 	} catch (e) {
-		return console.error(`Failed to update a project with the id ${id.toNumber()}. ${e}`);
+		return console.error(`Failed to update a collection with the id ${id.toNumber()}. ${e}`);
 	}
-	console.log(`Successfully edited project with the id ${id}.`);
+	console.log(`Successfully edited collection with the id ${id}.`);
+};
+
+export const tokenEditListener = async (
+	id: BigNumber,
+	projectId: BigNumber,
+	collectionId: BigNumber,
+	name: string,
+	description: string,
+	priceinWei: BigNumber,
+	maxSupply: BigNumber,
+	traitType: string,
+	assetType: AssetType,
+	paused: boolean,
+) => {
+	const foundToken = await Token.findByPk(id.toNumber());
+	if (!foundToken) return console.log(`TokenEdit: Token not found`);
+
+	console.log('paused', paused);
+	try {
+		await foundToken.update({
+			name,
+			id: id.toNumber(),
+			collectionId: collectionId.toNumber(),
+			priceInWei: priceinWei.toNumber(),
+			maxSupply: maxSupply.toNumber(),
+			amountMinted: 0,
+			traitType: traitType,
+			paused,
+			description,
+			assetType: assetType,
+		});
+	} catch (e) {
+		return console.error(`Failed to update a token with the id ${id.toNumber()}. ${e}`);
+	}
+	console.log(`Successfully edited token with the id ${id}.`);
 };
