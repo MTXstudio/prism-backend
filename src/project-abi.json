@@ -3,9 +3,10 @@
 	{
 		"anonymous": false,
 		"inputs": [
-			{ "indexed": false, "internalType": "string", "name": "_name", "type": "string" },
 			{ "indexed": true, "internalType": "uint256", "name": "_id", "type": "uint256" },
 			{ "indexed": true, "internalType": "uint256", "name": "_projectId", "type": "uint256" },
+			{ "indexed": false, "internalType": "string", "name": "_name", "type": "string" },
+			{ "indexed": false, "internalType": "string", "name": "_description", "type": "string" },
 			{ "indexed": false, "internalType": "uint256", "name": "royalties", "type": "uint256" },
 			{ "indexed": false, "internalType": "address", "name": "manager", "type": "address" },
 			{ "indexed": false, "internalType": "uint256", "name": "_maxInvocation", "type": "uint256" },
@@ -23,6 +24,27 @@
 	{
 		"anonymous": false,
 		"inputs": [
+			{ "indexed": true, "internalType": "uint256", "name": "_id", "type": "uint256" },
+			{ "indexed": true, "internalType": "uint256", "name": "_projectId", "type": "uint256" },
+			{ "indexed": false, "internalType": "string", "name": "_name", "type": "string" },
+			{ "indexed": false, "internalType": "string", "name": "_description", "type": "string" },
+			{ "indexed": false, "internalType": "uint256", "name": "royalties", "type": "uint256" },
+			{ "indexed": false, "internalType": "address", "name": "manager", "type": "address" },
+			{ "indexed": false, "internalType": "uint256", "name": "_maxInvocation", "type": "uint256" },
+			{
+				"indexed": false,
+				"internalType": "enum PrismProjects.AssetType",
+				"name": "assetType",
+				"type": "uint8"
+			},
+			{ "indexed": false, "internalType": "bool", "name": "paused", "type": "bool" }
+		],
+		"name": "CollectionEdit",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
 			{ "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
 			{ "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
 		],
@@ -34,10 +56,23 @@
 		"inputs": [
 			{ "indexed": true, "internalType": "uint256", "name": "_id", "type": "uint256" },
 			{ "indexed": false, "internalType": "string", "name": "_name", "type": "string" },
+			{ "indexed": false, "internalType": "string", "name": "_description", "type": "string" },
 			{ "indexed": false, "internalType": "address", "name": "_chef", "type": "address" },
 			{ "indexed": false, "internalType": "string[]", "name": "traitTypes", "type": "string[]" }
 		],
 		"name": "ProjectCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{ "indexed": true, "internalType": "uint256", "name": "_id", "type": "uint256" },
+			{ "indexed": false, "internalType": "string", "name": "_name", "type": "string" },
+			{ "indexed": false, "internalType": "string", "name": "_description", "type": "string" },
+			{ "indexed": false, "internalType": "address", "name": "_chef", "type": "address" },
+			{ "indexed": false, "internalType": "string[]", "name": "traitTypes", "type": "string[]" }
+		],
+		"name": "ProjectEdit",
 		"type": "event"
 	},
 	{
@@ -96,6 +131,7 @@
 		"name": "collections",
 		"outputs": [
 			{ "internalType": "string", "name": "name", "type": "string" },
+			{ "internalType": "string", "name": "description", "type": "string" },
 			{ "internalType": "uint256", "name": "id", "type": "uint256" },
 			{ "internalType": "uint256", "name": "projectId", "type": "uint256" },
 			{ "internalType": "uint256", "name": "royalties", "type": "uint256" },
@@ -125,6 +161,7 @@
 	{
 		"inputs": [
 			{ "internalType": "string", "name": "_name", "type": "string" },
+			{ "internalType": "string", "name": "_description", "type": "string" },
 			{ "internalType": "uint256", "name": "_maxInvocations", "type": "uint256" },
 			{ "internalType": "uint256", "name": "_projectId", "type": "uint256" },
 			{ "internalType": "address", "name": "_manager", "type": "address" },
@@ -139,6 +176,7 @@
 	{
 		"inputs": [
 			{ "internalType": "string", "name": "_name", "type": "string" },
+			{ "internalType": "string", "name": "_description", "type": "string" },
 			{ "internalType": "address", "name": "_chef", "type": "address" },
 			{ "internalType": "string[]", "name": "_traitTypes", "type": "string[]" }
 		],
@@ -152,6 +190,7 @@
 			{ "internalType": "uint256", "name": "_id", "type": "uint256" },
 			{ "internalType": "uint256", "name": "_projectId", "type": "uint256" },
 			{ "internalType": "string", "name": "_name", "type": "string" },
+			{ "internalType": "string", "name": "_description", "type": "string" },
 			{ "internalType": "uint256", "name": "_maxInvocations", "type": "uint256" },
 			{ "internalType": "address", "name": "_manager", "type": "address" },
 			{ "internalType": "uint256", "name": "_royalties", "type": "uint256" },
@@ -167,6 +206,7 @@
 		"inputs": [
 			{ "internalType": "uint256", "name": "_id", "type": "uint256" },
 			{ "internalType": "string", "name": "_name", "type": "string" },
+			{ "internalType": "string", "name": "_description", "type": "string" },
 			{ "internalType": "address", "name": "_chef", "type": "address" },
 			{ "internalType": "string[]", "name": "_traitTypes", "type": "string[]" }
 		],
@@ -230,6 +270,7 @@
 		"outputs": [
 			{ "internalType": "uint256", "name": "id", "type": "uint256" },
 			{ "internalType": "string", "name": "name", "type": "string" },
+			{ "internalType": "string", "name": "description", "type": "string" },
 			{ "internalType": "address", "name": "chef", "type": "address" }
 		],
 		"stateMutability": "view",
