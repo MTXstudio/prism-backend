@@ -43,7 +43,7 @@ const start = async () => {
 	const sequelize = new Sequelize(options);
 
 	try {
-		await sequelize.sync(); // Drop tables and create them again.
+		await sequelize.sync({ alter: true }); // Drop tables and create them again.
 		// await sequelize.addModels([]);
 		console.log(
 			`Server connected with database engine on host ${config.postgres.host} at ${config.postgres.port}`,
