@@ -1,4 +1,4 @@
-# prism-backend
+# Prism Backend
 
 > Heroku commands:
 
