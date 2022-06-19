@@ -1,6 +1,7 @@
 import { AssetType } from '../helpers/enums/asset-type';
 import { Table, Model, Column, ForeignKey, DataType } from 'sequelize-typescript';
 import { Collection } from './collection.model';
+import { Attribute } from 'helpers/interfaces/attribute';
 
 interface IToken {
 	id: number;
@@ -15,6 +16,7 @@ interface IToken {
 	assetType: AssetType;
 	image?: string;
 	traitIds?: number[];
+	attributes?: Attribute[];
 }
 
 @Table({
@@ -58,4 +60,9 @@ export class Token extends Model<Partial<IToken>> {
 		type: DataType.ARRAY(DataType.STRING),
 	})
 	traitIds: string[];
+
+	@Column({
+		type: DataType.ARRAY(DataType.JSON),
+	})
+	attributes: Attribute[];
 }
