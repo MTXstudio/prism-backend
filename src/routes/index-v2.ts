@@ -62,13 +62,17 @@ router.get('/project/:id', async (req, res) => {
 router.get('/projects', async (req, res) => {
 	let projects;
 	try {
-		projects = await Project.findAll({});
+		projects = await Project.findAll({
+			include: [Collection],
+		});
 	} catch (e) {
 		console.error(`Failed to get projects. ${e}`);
 		return res
 			.status(ErrorCode.INTERNAL_SERVER_ERROR_500)
 			.send('Failed to get all the project from databse.');
 	}
+
+	// const collectionsCount = await Collection.count({ where: { projectId: } });
 
 	res.json(projects);
 });
