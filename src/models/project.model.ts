@@ -1,4 +1,5 @@
-import { Table, Model, Column, DataType } from 'sequelize-typescript';
+import { Table, Model, Column, DataType, HasMany } from 'sequelize-typescript';
+import { Collection, ICollection } from './collection.model';
 
 interface IProject {
 	id: number;
@@ -7,6 +8,7 @@ interface IProject {
 	traitTypes: string[];
 	description?: string;
 	externalUrl?: string;
+	collections: ICollection[];
 }
 
 @Table({
@@ -14,7 +16,7 @@ interface IProject {
 	// tableName: 'users', //define custom table name
 	timestamps: false, // By default, Sequelize automatically adds the fields createdAt and updatedAt
 })
-export class Project extends Model<IProject> {
+export class Project extends Model<IProject, Partial<IProject>> {
 	@Column
 	name: string;
 
@@ -31,4 +33,7 @@ export class Project extends Model<IProject> {
 
 	@Column
 	externalUrl: string;
+
+	@HasMany(() => Collection)
+	collections: Collection[];
 }
