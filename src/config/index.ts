@@ -69,7 +69,7 @@ export const config = {
 		pwd: process.env.NODE_ENV === 'development' ? 'postgres' : process.env.HEROKU_PG_PWD,
 		port: process.env.NODE_ENV === 'development' ? 5432 : process.env.HEROKU_PG_PORT,
 		host: process.env.NODE_ENV === 'development' ? 'localhost' : process.env.HEROKU_PG_HOST,
-		dbName: process.env.NODE_ENV === 'development' ? 'prism' : process.env.HEROKU_PG_DB,
+		dbName: process.env.NODE_ENV === 'development' ? 'prism_test' : process.env.HEROKU_PG_DB,
 		// connectionUrl:
 		// 	process.env.NODE_ENV === 'development'
 		// 		? `postgres://postgres:postgres@localhost:5432/postgres`

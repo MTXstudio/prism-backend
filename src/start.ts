@@ -26,9 +26,10 @@ const start = async () => {
 		dialect: 'postgres',
 		host: config.postgres.host,
 		port: config.postgres.port as number,
-		models: [path.resolve(__dirname, './models/*.model.ts')],
-		modelMatch: (filename, member) =>
-			filename.substring(0, filename.indexOf('.model')) === member.toLowerCase(),
+		models: [path.resolve(__dirname, './models/*.model.*')],
+		modelMatch: (filename, member) => {
+			return filename.substring(0, filename.indexOf('.model')) === member.toLowerCase();
+		},
 		logging: false,
 	};
 	if (process.env.NODE_ENV !== 'development') {
@@ -43,7 +44,6 @@ const start = async () => {
 
 	try {
 		await sequelize.sync({ alter: true }); // Drop tables and create them again.
-		// await sequelize.addModels([]);
 		console.log(
 			`Server connected with database engine on host ${config.postgres.host} at ${config.postgres.port}`,
 		);
