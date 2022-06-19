@@ -7,7 +7,8 @@ import sharp from 'sharp';
 import fs from 'fs';
 import pinataSDK from '@pinata/sdk';
 import { config } from '../config/index';
-import { AssetType } from 'helpers/enums/asset-type';
+import { AssetType } from '../helpers/enums/asset-type';
+import { Attribute } from '../helpers/interfaces/attribute';
 
 const pinata = pinataSDK(config.pinata.apiKey, config.pinata.secretKey);
 
@@ -75,6 +76,8 @@ export const tokenCreatedListener = async (
 	name: string,
 	description: string,
 	priceInWei: BigNumber,
+	imageCid: string,
+	attributes: Attribute[],
 	maxSupply: BigNumber,
 	traitType: string,
 	assetType: AssetType,
@@ -95,6 +98,8 @@ export const tokenCreatedListener = async (
 				paused,
 				description,
 				assetType,
+				image: config.pinata.baseUrl + imageCid,
+				attributes,
 			});
 		} catch (e) {
 			return console.error(
