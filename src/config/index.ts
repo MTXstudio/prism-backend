@@ -19,8 +19,8 @@ if (
 	console.error('Please provide an alchemy api key.');
 	process.exit(-1);
 }
-const projectContractAddress = '0xe957a12c5546808E8E071EC5b910f0EF59554D99';
-const tokenContractAddress = '0x5CfAc860BE6Ad5e770e7E5D9fa31Fb255Ec6b4b4';
+const projectContractAddress = '0x2E9563618F7cC7B4bef7784750cb8616a8Cb8D32';
+const tokenContractAddress = '0x3455371c6A400686024E8f5cA8Fc59dca51A1666';
 
 const provider = new ethers.providers.JsonRpcProvider(
 	`https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_KEY}`,
@@ -69,7 +69,7 @@ export const config = {
 		pwd: process.env.NODE_ENV === 'development' ? 'postgres' : process.env.HEROKU_PG_PWD,
 		port: process.env.NODE_ENV === 'development' ? 5432 : process.env.HEROKU_PG_PORT,
 		host: process.env.NODE_ENV === 'development' ? 'localhost' : process.env.HEROKU_PG_HOST,
-		dbName: process.env.NODE_ENV === 'development' ? 'postgres' : process.env.HEROKU_PG_DB,
+		dbName: process.env.NODE_ENV === 'development' ? 'prism' : process.env.HEROKU_PG_DB,
 		// connectionUrl:
 		// 	process.env.NODE_ENV === 'development'
 		// 		? `postgres://postgres:postgres@localhost:5432/postgres`
