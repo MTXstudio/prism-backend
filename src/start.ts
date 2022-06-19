@@ -8,12 +8,19 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import path from 'path';
 
+import helmet from 'helmet';
+
 const app = express();
 
 app.use(morgan('combined'));
-app.use(cors());
+app.use(
+	cors({
+		origin: 'https://mtx-labs-prism.netlify.app',
+	}),
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(helmet());
 app.use('/api/v2', routesV2);
 
 contractEventLoader();
