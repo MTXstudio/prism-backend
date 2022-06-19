@@ -18,7 +18,7 @@ export interface ICollection {
 	// tableName: 'users', //define custom table name
 	timestamps: false, // By default, Sequelize automatically adds the fields createdAt and updatedAt
 })
-export class Collection extends Model<ICollection> {
+export class Collection extends Model<ICollection, Partial<ICollection>> {
 	@ForeignKey(() => Project)
 	@Column
 	projectId: number;
