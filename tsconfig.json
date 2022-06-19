@@ -5,7 +5,10 @@
 		"lib": ["es5", "ESNext"],
 		"resolveJsonModule": true,
 		"esModuleInterop": true,
-		"baseUrl": "./"
+		"baseUrl": "./src",
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"strictPropertyInitialization": false
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules"]

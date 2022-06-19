@@ -1,61 +1,61 @@
-import express, { Express, Request } from 'express';
-import admin from 'firebase-admin';
+import express from 'express';
 import { config } from './config/index';
-import './helpers/fetch-polyfill';
-import { json, urlencoded } from 'body-parser';
-import cors from 'cors';
+import { contractEventLoader } from './events/loader';
+import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
+import routesV2 from './routes/index-v2';
 import morgan from 'morgan';
-import routes from './routes/index';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import path from 'path';
 
 const app = express();
-app.use(json());
-app.use(urlencoded({ extended: false }));
-app.use(
-	cors({
-		origin: '*',
-		methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-		preflightContinue: false,
-		optionsSuccessStatus: 204,
-	}),
-);
-app.use(morgan('tiny'));
 
-const firebaseApp = admin.initializeApp({
-	credential: admin.credential.cert({
-		projectId: config.firebase.projectId,
-		privateKey: config.firebase.privateKey,
-		clientEmail: config.firebase.clientEmail,
-	}),
-});
+app.use(morgan('combined'));
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+// app.use('/v1', routesV1);
+app.use('/api/v2', routesV2);
 
-const db = firebaseApp.firestore();
+contractEventLoader();
 
-// contractEventLoader(db);
-app.use((req, res, next) => {
-	if (!req.db) req.db = db;
-	next();
-});
+const start = async () => {
+	const options: SequelizeOptions = {
+		username: config.postgres.user,
+		password: config.postgres.pwd,
+		database: config.postgres.dbName,
+		dialect: 'postgres',
+		host: config.postgres.host,
+		port: config.postgres.port as number,
+		models: [path.resolve(__dirname, './models/*.model.ts')],
+		modelMatch: (filename, member) =>
+			filename.substring(0, filename.indexOf('.model')) === member.toLowerCase(),
+		logging: false,
+	};
+	if (process.env.NODE_ENV !== 'development') {
+		options.dialectOptions = {
+			ssl: {
+				require: true,
+				rejectUnauthorized: false,
+			},
+		};
+	}
+	const sequelize = new Sequelize(options);
 
-app.use(routes);
+	try {
+		await sequelize.sync({ alter: true }); // Drop tables and create them again.
+		// await sequelize.addModels([]);
+		console.log(
+			`Server connected with database engine on host ${config.postgres.host} at ${config.postgres.port}`,
+		);
+	} catch (e) {
+		console.error(`failed synchronizing all models. ${e}`);
+		process.exit(-1);
+	}
 
-app.listen(config.server.port, () =>
-	console.log(`The Server is listening to ${config.server.port}`),
-);
+	app.listen(config.server.port, () =>
+		console.log(`The Server is listening on ${config.server.port}`),
+	);
+};
 
-// const tbl = await connectToTableLand();
-// if (!tbl) process.exit(-1);
-// const tables = await tbl.list();
-
-// console.log('tables', tables[tables.length - 1]);
-
-// if (tables.length === 0 || true) {
-// 	// await tbl.create(projectTableScript(), {
-// 	// 	description: 'In this table are stored all the nft projects',
-// 	// });
-// 	await tbl.create(collectionTableScript(), {
-// 		description: 'In this table are stored all the nft collections',
-// 	});
-// 	// await tbl.create(tokenTableScript(), {
-// 	// 	description: 'In this table are stored all the nft tokens',
-// 	// });
-// }
+start();

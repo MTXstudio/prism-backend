@@ -31,7 +31,6 @@ router.get('/whitelisted/:address', async (req, res) => {
 	}
 
 	const addresses = axiosRes.data.values.map((value: any[]) => value[0]) as string[];
-	// console.log(addresses);
 
 	const foundAddress = addresses.find((addr) => addr.toLowerCase() === address.toLowerCase());
 
@@ -136,7 +135,6 @@ router.post('/token', async (req, res) => {
 });
 
 router.patch('/token', async (req, res) => {
-	//body contains => traitIds, masterId
 	const { traitIds, masterId } = req.body;
 
 	if (!traitIds || !masterId)
@@ -203,14 +201,8 @@ router.patch('/token', async (req, res) => {
 		console.error(e);
 		return res.status(ErrorCode.INTERNAL_SERVER_ERROR_500).send('Failed to upload a file to ipfs.');
 	}
-	// get content identifier
-	console.log(
-		'Update master nft where CID->',
-		fileInfo?.IpfsHash,
-		' and ',
-		'master id -> ',
-		masterId,
-	);
+
+	console.log(`Update master nft where CID-> ${fileInfo?.IpfsHash} and master id ${masterId}`);
 
 	// delete composed file
 	fs.unlink('./composite.png', (err) => {
@@ -237,10 +229,6 @@ router.patch('/token', async (req, res) => {
 			.status(ErrorCode.INTERNAL_SERVER_ERROR_500)
 			.send(`Failed to update master nft with the id ${masterId}.`);
 	}
-
-	// update masterNft traitIds, imageURI
-
-	//Upload to ipfs ->
 
 	res.send(fileInfo);
 });
