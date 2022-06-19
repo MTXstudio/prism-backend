@@ -1,7 +1,7 @@
 import { Table, Model, Column, ForeignKey } from 'sequelize-typescript';
 import { Project } from './project.model';
 
-interface ICollection {
+export interface ICollection {
 	id: number;
 	projectId: number;
 	name: string;
