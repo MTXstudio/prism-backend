@@ -12,10 +12,14 @@ import helmet from 'helmet';
 
 const app = express();
 
+const corsOrigins = ['https://mtx-labs-prism.netlify.app', 'https://cyberfrens-beta.co'];
+
+if (process.env.NODE_ENV === 'development') corsOrigins.push('*');
+
 app.use(morgan('combined'));
 app.use(
 	cors({
-		origin: ['https://mtx-labs-prism.netlify.app', 'https://cyberfrens-beta.co'],
+		origin: corsOrigins,
 	}),
 );
 app.use(bodyParser.json());
