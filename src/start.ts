@@ -15,7 +15,7 @@ const app = express();
 app.use(morgan('combined'));
 app.use(
 	cors({
-		origin: 'https://mtx-labs-prism.netlify.app',
+		origin: ['https://mtx-labs-prism.netlify.app', 'https://cyberfrens-beta.co'],
 	}),
 );
 app.use(bodyParser.json());
