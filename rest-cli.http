@@ -74,3 +74,6 @@ Content-Type: application/json
 
 ###
 GET http://127.0.0.1:5000/api/v2/tokens?collectionId=0
+
+###
+GET http://127.0.0.1:5000/api/v2/tokens?tokenIds=["1","2"]
