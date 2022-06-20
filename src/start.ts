@@ -16,6 +16,14 @@ const corsOrigins = ['https://mtx-labs-prism.netlify.app', 'https://cyberfrens-b
 
 if (process.env.NODE_ENV === 'development') corsOrigins.push('*');
 
+const firebaseApp = admin.initializeApp({
+	credential: admin.credential.cert({
+		projectId: config.firebase.projectId,
+		privateKey: config.firebase.privateKey,
+		clientEmail: config.firebase.clientEmail,
+	}),
+});
+
 app.use(morgan('combined'));
 app.use(
 	cors({
@@ -26,6 +34,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(helmet());
 app.use('/api/v2', routesV2);
+
+const db = firebaseApp.firestore();
+
+// contractEventLoader(db);
+app.use((req, res, next) => {
+	if (!req.db) req.db = db;
+	next();
+});
 
 contractEventLoader();
 
