@@ -189,8 +189,8 @@ export const masterEditListener = async (id: BigNumber, traitsBigNumbers: BigNum
 
 export const projectEditListener = async (
 	id: BigNumber,
-	description: string,
 	name: string,
+	description: string,
 	owner: string,
 	traitTypes: string[],
 ) => {
