@@ -8,6 +8,7 @@ import sharp from 'sharp';
 import fs from 'fs';
 import pinataSDK from '@pinata/sdk';
 import { config } from '../config/index';
+import { firestore } from 'firebase-admin';
 
 const pinata = pinataSDK(config.pinata.apiKey, config.pinata.secretKey);
 
@@ -232,29 +233,6 @@ router.patch('/collection', async (req, res) => {
 	res.json(collection);
 });
 
-router.get('/tokens', async (req, res) => {
-	const { collectionId } = req.query;
-	if (!collectionId)
-		return res.status(ErrorCode.INTERNAL_SERVER_ERROR_500).send('Query paramenters are missing.');
-
-	let tokens;
-
-	try {
-		tokens = await Token.findAll({
-			where: {
-				collectionId: Number(collectionId),
-			},
-		});
-	} catch (e) {
-		console.error(`Couldn't retrieve tokens for collection id ${collectionId}. ${e}`);
-		return res
-			.status(ErrorCode.INTERNAL_SERVER_ERROR_500)
-			.send(`Failed to fetching tokens for the colleciton id ${collectionId}.`);
-	}
-
-	res.send(tokens);
-});
-
 router.post('/token', async (req, res) => {
 	const { name, id, collectionId, priceInWei, maxSupply, traitType } = req.body;
 
@@ -372,6 +350,55 @@ router.patch('/master', async (req, res) => {
 	}
 
 	res.send(fileInfo);
+});
+
+router.get('/tokens', async (req, res) => {
+	const { collectionId, tokenIds } = req.query;
+	if (!collectionId && !tokenIds)
+		return res.status(ErrorCode.INTERNAL_SERVER_ERROR_500).send('Query paramenters are missing.');
+
+	let tokens;
+
+	if (collectionId) {
+		try {
+			tokens = await Token.findAll({
+				where: {
+					collectionId: Number(collectionId),
+				},
+			});
+		} catch (e) {
+			console.error(`Couldn't retrieve tokens for collection id ${collectionId}. ${e}`);
+			return res
+				.status(ErrorCode.INTERNAL_SERVER_ERROR_500)
+				.send(`Failed to fetching tokens for the colleciton id ${collectionId}.`);
+		}
+	} else {
+		const tokenIdList = JSON.parse(tokenIds as string);
+
+		const collectionReference = req.db.collection(config.firebase.collectionNames.tokens);
+		const batches = [];
+
+		while (tokenIdList.length) {
+			const batch = tokenIdList.splice(0, 10);
+			batches.push(
+				collectionReference
+					.where(firestore.FieldPath.documentId(), 'in', [...batch])
+					.get()
+					.then((results) => results.docs.map((result) => ({ ...result.data() }))),
+			);
+		}
+
+		try {
+			tokens = await Promise.all(batches).then((content) => content.flat());
+		} catch (e) {
+			console.error(e);
+			return res
+				.status(ErrorCode.INTERNAL_SERVER_ERROR_500)
+				.send(`Failed to retrieve tokens with the ids ${tokenIdList}.`);
+		}
+	}
+
+	res.json(tokens);
 });
 
 export default router;
