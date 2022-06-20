@@ -3,6 +3,7 @@ import { config } from './config/index';
 import { contractEventLoader } from './events/loader';
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
 import routesV2 from './routes/index-v2';
+import admin from 'firebase-admin';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -33,15 +34,14 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(helmet());
-app.use('/api/v2', routesV2);
-
-const db = firebaseApp.firestore();
-
-// contractEventLoader(db);
 app.use((req, res, next) => {
 	if (!req.db) req.db = db;
 	next();
 });
+
+app.use('/api/v2', routesV2);
+
+const db = firebaseApp.firestore();
 
 contractEventLoader();
 

@@ -10,6 +10,9 @@
 		"emitDecoratorMetadata": true,
 		"strictPropertyInitialization": false
 	},
+	"ts-node": {
+		"files": true
+	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules"]
 }
