@@ -13,6 +13,38 @@ const pinata = pinataSDK(config.pinata.apiKey, config.pinata.secretKey);
 
 const router = express.Router();
 
+router.get('/', (req, res) => {
+	res.json({
+		connection: true,
+		version: 2,
+	});
+});
+
+router.get('/whitelisted/:address', async (req, res) => {
+	const { address } = req.params;
+	if (!address) return res.status(ErrorCode.BAD_REQUEST_400).send('address property not found.');
+
+	let axiosRes;
+	try {
+		axiosRes = await axios.get(
+			`https://sheets.googleapis.com/v4/spreadsheets/1ZsoHD-ZoSf0FPvIurdud7LuKVj0qYjCLXok395NXyMA/values/BETA%20Testers?key=${config.google.apiKey}`,
+		);
+	} catch (e) {
+		console.log(`Failed fetching spreadsheet data ${e}`);
+		return res.status(500).send('Failed to retrieve whitelist addresses.');
+	}
+
+	const addresses = axiosRes.data.values.map((value: any[]) => value[0]) as string[];
+
+	const foundAddress = addresses.find((addr) => addr.toLowerCase() === address.toLowerCase());
+
+	if (foundAddress) {
+		res.send(true);
+	} else {
+		res.send(false);
+	}
+});
+
 router.post('/project', async (req: Request, res) => {
 	const { id, name, owner, traitTypes } = req.body || {};
 	// console.log(req.body);
